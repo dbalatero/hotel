@@ -1,12 +1,15 @@
-require 'time'
-require 'date'
 require 'simplecov'
 SimpleCov.start
+
+require 'time'
+require 'date'
+require 'awesome_print'
+require 'pry'
+
 
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/reporters'
-
 
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
