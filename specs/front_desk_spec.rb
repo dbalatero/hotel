@@ -30,7 +30,7 @@ describe "FrontDesk class" do
 
     it "creates a new instance of reservation" do
       front_desk = Hotel::FrontDesk.new
-      dates = { start_date: '6/7/2018', end_date: '6/10/2018'}
+      dates = { start_date: Date.parse('7-6-2018'), end_date: Date.parse('10-6-2018')}
 
       new_res = front_desk.make_reservation(dates)
 
@@ -39,7 +39,6 @@ describe "FrontDesk class" do
       new_res.res_id.must_equal 1
       front_desk.reservations.must_include new_res
       new_res.start_date.must_be_instance_of Date
-      binding.pry
 
     end
 

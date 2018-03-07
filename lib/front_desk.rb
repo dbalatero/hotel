@@ -24,10 +24,10 @@ module Hotel
       id = @reservations.length + 1
       room = @all_rooms.first
       # write helper method here for the conversion to Date object?
-      start_date =  check_start_date(input[:start_date])
-      end_date = check_end_date(input[:end_date])
+      start_date = input[:start_date]
+      end_date = input[:end_date]
       # write a helper method later to check for available rooms
-    
+
       reservation = Hotel::Reservation.new(res_id: id, room: room, start_date: start_date, end_date: end_date)
 
       @reservations << reservation
@@ -49,13 +49,13 @@ module Hotel
       return rooms
     end
 
-    def check_start_date(date)
-      Date.strptime(date, '%m/%d/%Y')
-    end
-
-    def check_end_date(date)
-      Date.strptime(date, '%m/%d/%Y')
-    end
+    # def check_start_date(date)
+    #   Date.strptime(date, '%m/%d/%Y')
+    # end
+    #
+    # def check_end_date(date)
+    #   Date.strptime(date, '%m/%d/%Y')
+    # end
 
 
   end
