@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe "Reservation class" do
 
   before do
-    start_date = Date.parse('2018-05-20')
+    start_date = Date.new(2018,5,20)
     end_date = start_date + 4
     @reservation_data = {
       res_id: 8,

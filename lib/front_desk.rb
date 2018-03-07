@@ -16,24 +16,27 @@ module Hotel
       # all_rooms instance variable should invoke a private load rooms method that uses a 20 times loop to create 20 instances of Room, using the iteration variable + 1 to set the value of the room_number instance variable.
       @all_rooms = load_rooms
       @reservations = []
-      #use a hash to store instance variable for blocked rooms? 
+      #use a hash to store instance variable for blocked rooms?
     end
 
     # def get_list_of_all_rooms (use attr_reader: getter)
 
-    def make_reservation(input)
-      id = @reservations.length + 1
-      room = @all_rooms.first
-      # write helper method here for the conversion to Date object?
-      start_date = input[:start_date]
-      end_date = input[:end_date]
-      # write a helper method later to check for available rooms
+    def make_reservation(dates)
+      reservation_data = {
+        res_id: @reservations.length + 1,
+        room: @all_rooms.first,
+        # write helper method here to check for Date objects and to ensure that end_date is after the start_date
+        start_date: check_date(dates[:start_date]),
+        end_date: check_date(dates[:end_date])
+        # write a helper method later to check for available rooms
+      }
+      new_res =  create_new_res_instance(reservation_data)
 
-      reservation = Hotel::Reservation.new(res_id: id, room: room, start_date: start_date, end_date: end_date)
+      # Hotel::Reservation.new(res_id: id, room: room, start_date: start_date, end_date: end_date)
 
-      @reservations << reservation
-
-      return reservation
+      @reservations << new_res
+      
+      return new_res
     end
 
     # def get_list_of_res_for(date)
@@ -50,14 +53,17 @@ module Hotel
       return rooms
     end
 
-    # def check_start_date(date)
-    #   Date.strptime(date, '%m/%d/%Y')
-    # end
-    #
-    # def check_end_date(date)
-    #   Date.strptime(date, '%m/%d/%Y')
-    # end
+    def check_date(date)
+      if date.class != Date
+        raise ArgumentError.new("Date must be a Date object")
+      else
+        return date
+      end
+    end
 
+    def create_new_res_instance(input)
+      Hotel::Reservation.new(input)
+    end
 
   end
 
