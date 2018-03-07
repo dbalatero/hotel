@@ -4,7 +4,7 @@ describe "FrontDesk class" do
 
   describe "initialize" do
 
-    it "is an instance of Admin" do
+    it "is an instance of FrontDesk" do
       admin = Hotel::FrontDesk.new
       admin.must_be_kind_of Hotel::FrontDesk
     end
@@ -17,7 +17,7 @@ describe "FrontDesk class" do
       admin.all_rooms.must_be_kind_of Array
     end
 
-    it "loads empty array to hold future reserations" do
+    it "creates empty array to hold future reservations" do
       admin = Hotel::FrontDesk.new
 
       admin.reservations.length.must_equal 0
@@ -26,11 +26,24 @@ describe "FrontDesk class" do
 
   end
 
-  # describe "make_res method" do
-  #
-  #   it "creates a new reservation"
-  #
-  # end
+  describe "make_reservation method" do
+
+    it "creates a new instance of reservation" do
+      front_desk = Hotel::FrontDesk.new
+      dates = { start_date: '6/7/2018', end_date: '6/10/2018'}
+
+      new_res = front_desk.make_reservation(dates)
+
+      new_res.must_be_instance_of Hotel::Reservation
+      # new_res.id.must_equal  front_desk.reservations.length + 1
+      new_res.res_id.must_equal 1
+      front_desk.reservations.must_include new_res
+      new_res.start_date.must_be_instance_of Date
+      binding.pry
+
+    end
+
+  end
   #
   # describe "get_list_of_res_for(date) method" do
   #

@@ -2,17 +2,16 @@ require 'pry'
 
 module Hotel
 
-  class Room
+  MAX_ROOMS_COUNT = 20
 
-    MAX_ROOMS_COUNT = 20
+  class Room
 
     attr_accessor :room_number
     attr_reader :reservations
 
-    def initialize (input)
+    def initialize(input)
 
       @room_number = check_room_num(input[:room_number])
-      # @room_number = input[:room_number]
       @reservations = input[:trips] == nil ? [] : input[:trips]
     end
 

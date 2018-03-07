@@ -5,12 +5,19 @@ module Hotel
     attr_reader :res_id, :room, :start_date, :end_date, :cost
 
     def initialize(input)
-      @res_id = input[:id]
+      @res_id = input[:res_id]
       @room = input[:room]
       @start_date = input[:start_date]
       @end_date = input[:end_time]
-      # @cost
+      @cost = cost
     end
+
+    def cost
+    end
+
+    def duration
+    end
+
 
   end
 
