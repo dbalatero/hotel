@@ -16,6 +16,7 @@ module Hotel
       # all_rooms instance variable should invoke a private load rooms method that uses a 20 times loop to create 20 instances of Room, using the iteration variable + 1 to set the value of the room_number instance variable.
       @all_rooms = load_rooms
       @reservations = []
+      #use a hash to store instance variable for blocked rooms? 
     end
 
     # def get_list_of_all_rooms (use attr_reader: getter)
