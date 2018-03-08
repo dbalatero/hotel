@@ -61,24 +61,29 @@ describe "FrontDesk class" do
       @front_desk = Hotel::FrontDesk.new
     end
 
-    # xit "throws an argument error for a bad ID"
-    #   proc{ @front_desk.get_list_of_res_for() }.must_raise ArgumentError
+    it "returns a list of reservations for given date" do
 
-
-    it "finds a list of reservations for given date" do
-      # arrange by calling make_res method a couple times for a specific room/date then call get_list method for that date..or maybe a date inside the reservation period?
-      front_desk = Hotel::FrontDesk.new
       dates = { start_date: Date.new(2018,6,7), end_date: Date.new(2018,6,10)}
       dates_2 = { start_date: Date.new(2018,6,5), end_date: Date.new(2018,6,15) }
 
-      front_desk.make_reservation(dates)
-      front_desk.make_reservation(dates_2)
+      @front_desk.make_reservation(dates)
+      @front_desk.make_reservation(dates_2)
       search_date = Date.new(2018,6,8)
 
-      rezzies = front_desk.find_reservations_for(search_date)
-      binding.pry
+      rezzies = @front_desk.find_reservations_for(search_date)
+
       rezzies.must_be_kind_of Array
       rezzies.length.must_equal 2
+    end
+
+    it "returns empty array if no reservations exist for a given date" do
+      front_desk = Hotel::FrontDesk.new
+      search_date = Date.new(2018,7,11)
+
+      reservations = front_desk.find_reservations_for(search_date)
+      # binding.pry
+      reservations.must_be_kind_of Array
+      reservations.length.must_equal 0
     end
 
     #

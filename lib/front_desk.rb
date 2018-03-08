@@ -19,23 +19,27 @@ module Hotel
     # def get_list_of_all_rooms (use attr_reader: getter)
 
     def make_reservation(dates)
+      sd = dates[:start_date]
+      ed = dates[:end_date]
 
-      if check_dates(dates[:start_date], dates[:end_date])
+      if check_dates(sd, ed)
 
         reservation_data = {
           res_id: @reservations.length + 1,
           # write a helper method later to check for available rooms
+          # room: @all_rooms.find do |room|
+          #   room.available?(sd, ed)
+          # end
           room: @all_rooms.first,
           # write helper method here to check for Date objects and to ensure that end_date is after the start_date
-          start_date: dates[:start_date],
-          end_date: dates[:end_date]
+          start_date: sd,
+          end_date: ed
         }
         new_res =  create_new_res_instance(reservation_data)
 
-        res_range = range(reservation_data[:start_date], reservation_data[:end_date])
+        reservation_data[:room].booked_dates << range(sd, ed)
 
         @reservations << new_res
-        reservation_data[:room].booked_dates << res_range
       end
 
       return new_res
@@ -49,9 +53,6 @@ module Hotel
 
     private
 
-    def available?
-
-    end
 
     def load_rooms
       rooms = []
