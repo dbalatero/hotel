@@ -38,7 +38,6 @@ describe "FrontDesk class" do
       new_res.res_id.must_equal 1
       front_desk.reservations.must_include new_res
       new_res.start_date.must_be_instance_of Date
-      binding.pry
     end
 
     it "selects the first available room"
@@ -66,19 +65,21 @@ describe "FrontDesk class" do
     #   proc{ @front_desk.get_list_of_res_for() }.must_raise ArgumentError
 
 
-    it "finds a list of reservations for given date"
-    # arrange by calling make_res method a couple times for a specific room/date then call get_list method for that date..or maybe a date inside the reservation period?
-    front_desk = Hotel::FrontDesk.new
-    dates = { start_date: Date.new(2018,6,7), end_date: Date.new(2018,6,10)}
-    dates_2 = { start_date: Date.new(2018,6,5), end_date: Date.new(2018,6,15) }
+    it "finds a list of reservations for given date" do
+      # arrange by calling make_res method a couple times for a specific room/date then call get_list method for that date..or maybe a date inside the reservation period?
+      front_desk = Hotel::FrontDesk.new
+      dates = { start_date: Date.new(2018,6,7), end_date: Date.new(2018,6,10)}
+      dates_2 = { start_date: Date.new(2018,6,5), end_date: Date.new(2018,6,15) }
 
-    new_res = front_desk.make_reservation(dates)
+      front_desk.make_reservation(dates)
+      front_desk.make_reservation(dates_2)
+      search_date = Date.new(2018,6,8)
 
-    rezzies = @front_desk.find_resevations_for(Date.new(2018,6,8))
-
-    rezzies.must_be_kind_of Array
-    rezzies.length.must_equal 2
-
+      rezzies = front_desk.find_reservations_for(search_date)
+      binding.pry
+      rezzies.must_be_kind_of Array
+      rezzies.length.must_equal 2
+    end
 
     #
     #   it "gets list of all reservations for particular date"

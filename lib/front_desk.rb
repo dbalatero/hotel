@@ -23,11 +23,11 @@ module Hotel
       if check_dates(dates[:start_date], dates[:end_date])
 
         reservation_data = {
-          res_id: @reservations.last + 1,
+          res_id: @reservations.length + 1,
           # write a helper method later to check for available rooms
           room: @all_rooms.first,
           # write helper method here to check for Date objects and to ensure that end_date is after the start_date
-          start_date: dates[:start_date]
+          start_date: dates[:start_date],
           end_date: dates[:end_date]
         }
         new_res =  create_new_res_instance(reservation_data)
@@ -42,21 +42,16 @@ module Hotel
     end
 
     def find_reservations_for(date)
-      res_array = []
-      @reservations.each do |res|
-        if (res.start_date..res.end_date).include?(res)
-          res_array << res
-        else
-          return nil
-        end
-      end
-      return res_array
-
+      @reservations.find_all { |res| (res.start_date..res.end_date).include?(date) }
     end
 
     # def get_total_cost(reservation_id) <= I should just be able to find a reservation and call .cost on it...
 
     private
+
+    def available?
+
+    end
 
     def load_rooms
       rooms = []
@@ -67,7 +62,7 @@ module Hotel
     end
 
     def check_dates(s_date, e_date)
-      if date.class != Date
+      if s_date.class != Date || e_date.class != Date
         raise ArgumentError.new("Date must be a Date object")
       elsif e_date < s_date
         return false
