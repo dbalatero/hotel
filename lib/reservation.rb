@@ -9,13 +9,15 @@ module Hotel
       @room = input[:room]
       @start_date = input[:start_date]
       @end_date = input[:end_date]
-      @cost = cost
+      @cost = calculate_cost
     end
 
-    def cost
+    def calculate_cost
+      #end_date minus start_date, -1 (cuz last day isnt charged) * 200
     end
 
     def duration
+      # end date minus start date?
     end
 
 

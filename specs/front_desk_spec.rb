@@ -38,7 +38,7 @@ describe "FrontDesk class" do
       new_res.res_id.must_equal 1
       front_desk.reservations.must_include new_res
       new_res.start_date.must_be_instance_of Date
-
+      binding.pry
     end
 
   end

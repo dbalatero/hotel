@@ -6,27 +6,15 @@ module Hotel
 
   class Room
 
-    attr_accessor :room_number
-    attr_reader :reservations
+    attr_accessor :room_number, :booked_dates
 
     def initialize(input)
 
-      @room_number = check_room_num(input[:room_number])
-      @reservations = input[:trips] == nil ? [] : input[:trips]
+      @room_number = input[:room_number]
+      @booked_dates = input[:range] == nil ? [] : input[:range]
     end
 
-    private
-
-    def check_room_num(input)
-      if input != nil
-        if input <= 0 || input > MAX_ROOMS_COUNT
-          raise ArgumentError.new("Invalid room. Must be between 1 and 20")
-        else
-          @room_number = input
-        end
-      end
-    end
-
+    
   end
 
 end
