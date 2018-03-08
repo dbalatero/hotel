@@ -26,4 +26,6 @@ describe "Reservation class" do
 
   end
 
+
+
 end

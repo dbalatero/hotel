@@ -12,8 +12,12 @@ module Hotel
       @cost = calculate_cost
     end
 
+private
+    # this method is currently calculating accurate cost without ignoring the check-out day...not sure why
     def calculate_cost
-      #end_date minus start_date, -1 (cuz last day isnt charged) * 200
+      total_nights = (end_date - start_date).to_i
+      cost = total_nights * 200
+      return cost
     end
 
     def duration

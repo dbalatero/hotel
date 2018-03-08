@@ -19,25 +19,40 @@ module Hotel
     # def get_list_of_all_rooms (use attr_reader: getter)
 
     def make_reservation(dates)
-      reservation_data = {
-        res_id: @reservations.length + 1,
-        # write a helper method later to check for available rooms
-        room: @all_rooms.first,
-        # write helper method here to check for Date objects and to ensure that end_date is after the start_date
-        start_date: check_date(dates[:start_date]),
-        end_date: check_date(dates[:end_date])
-      }
-      new_res =  create_new_res_instance(reservation_data)
 
-      res_range = range(reservation_data[:start_date], reservation_data[:end_date])
+      if check_dates(dates[:start_date], dates[:end_date])
 
-      @reservations << new_res
-      reservation_data[:room].booked_dates << res_range
+        reservation_data = {
+          res_id: @reservations.last + 1,
+          # write a helper method later to check for available rooms
+          room: @all_rooms.first,
+          # write helper method here to check for Date objects and to ensure that end_date is after the start_date
+          start_date: dates[:start_date]
+          end_date: dates[:end_date]
+        }
+        new_res =  create_new_res_instance(reservation_data)
+
+        res_range = range(reservation_data[:start_date], reservation_data[:end_date])
+
+        @reservations << new_res
+        reservation_data[:room].booked_dates << res_range
+      end
 
       return new_res
     end
 
-    # def find_list_of_res_for(date)
+    def find_reservations_for(date)
+      res_array = []
+      @reservations.each do |res|
+        if (res.start_date..res.end_date).include?(res)
+          res_array << res
+        else
+          return nil
+        end
+      end
+      return res_array
+
+    end
 
     # def get_total_cost(reservation_id) <= I should just be able to find a reservation and call .cost on it...
 
@@ -46,16 +61,18 @@ module Hotel
     def load_rooms
       rooms = []
       MAX_ROOMS_COUNT.times do |num|
-        rooms << Hotel::Room.new(room_number: num)
+        rooms << Hotel::Room.new(room_number: num + 1)
       end
       return rooms
     end
 
-    def check_date(date)
+    def check_dates(s_date, e_date)
       if date.class != Date
         raise ArgumentError.new("Date must be a Date object")
+      elsif e_date < s_date
+        return false
       else
-        return date
+        return true
       end
     end
 
