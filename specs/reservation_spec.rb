@@ -16,13 +16,6 @@ describe "Reservation class" do
 
   describe "initialize" do
 
-    it "is an instance of Reservation" do
-      @reservation.must_be_kind_of Hotel::Reservation
-    end
-
-    it "stores an instance of room" do
-      @reservation.room.must_be_kind_of Hotel::Room
-    end
 
   end
 

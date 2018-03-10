@@ -2,15 +2,18 @@ module Hotel
 
   class Reservation
 
-    attr_reader :res_id, :room, :start_date, :end_date, :cost
+    attr_reader :start_date, :end_date, :cost
 
     def initialize(input)
-      @res_id = input[:res_id]
-      @room = input[:room]
       @start_date = input[:start_date]
       @end_date = input[:end_date]
       @cost = calculate_cost
     end
+
+    def booked?(date)
+      date_range.include?(date)
+    end
+
 
 private
     # this method is currently calculating accurate cost without ignoring the check-out day...not sure why
@@ -24,6 +27,9 @@ private
       # end date minus start date?
     end
 
+    def date_range
+      start_date..end_date
+    end
 
   end
 
