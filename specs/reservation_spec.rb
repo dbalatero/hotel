@@ -14,11 +14,6 @@ describe "Reservation class" do
     @reservation = Hotel::Reservation.new(@reservation_data)
   end
 
-  describe "initialize" do
-
-
-  end
-
 
 
 end

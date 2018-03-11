@@ -1,9 +1,7 @@
 require 'pry'
 
 module Hotel
-
   MAX_ROOMS_COUNT = 20
-
   class Room
     attr_reader :number
 
@@ -25,7 +23,5 @@ module Hotel
     def find_reservations_for(date)
       @reservations.find_all { |reservation| reservation.booked?(date) }
     end
-
   end
-
 end
