@@ -4,6 +4,7 @@ describe "FrontDesk class" do
   let(:admin) { Hotel::FrontDesk.new }
   let(:admin2) { Hotel::FrontDesk.new }
   let(:admin3) { Hotel::FrontDesk.new }
+  let(:admin4) { Hotel::FrontDesk.new }
 
   describe "initialize" do
     it "is an instance of FrontDesk" do
@@ -19,8 +20,7 @@ describe "FrontDesk class" do
 
   describe "#make_reservation(start_date:, end_date:)" do
     it "creates and stores a new Reservation" do
-      dates = { start_date: Date.new(2018,6,7), end_date: Date.new(2018,6,10)}
-      new_res = admin.make_reservation(dates)
+      new_res = admin.make_reservation(start_date: Date.new(2018,6,7), end_date: Date.new(2018,6,10))
       new_res.must_be_instance_of Hotel::Reservation
       admin.find_reservations_for( Date.new(2018, 6, 8))
         .must_include new_res
@@ -94,17 +94,39 @@ describe "FrontDesk class" do
       rooms = front_desk.available_rooms(start_date, end_date)
       rooms.length.must_equal 20
     end
+
+    it "does not return blocked rooms" do
+      front_desk = Hotel::FrontDesk.new
+      block = front_desk.create_block(start_date: Date.new(2018, 7, 1), end_date: Date.new(2018, 7, 6), num_rooms: 5)
+      # binding.pry
+      front_desk.available_rooms(Date.new(2018, 7, 1), Date.new(2018, 7, 6)).wont_include front_desk.rooms[0]
+    end
   end
 
   describe "#create_block(start_date:, end_date:, :num_rooms)" do
     it "creates and stores a new Block" do
-      admin4 = Hotel::FrontDesk.new
-      block = admin4.create_block(start_date: Date.new(2018, 12, 1), end_date: Date.new(2018, 12, 5), num_rooms: 4, rate: 150)
+      block = admin4.create_block(start_date: Date.new(2018, 12, 1), end_date: Date.new(2018, 12, 5), num_rooms: 4)
+      # binding.pry
       block.must_be_instance_of Hotel::Block
-      # admin4.find_reservations_for( Date.new(2018, 6, 8))
-      #   .must_include new_res
       block.start_date.must_equal Date.new(2018, 12, 1)
-      binding.pry
+      admin4.rooms[0].blocks.must_include block
+      admin4.rooms[3].blocks.must_include block
+      admin4.rooms[4].blocks.wont_include block
+    end
+  end
+
+  describe "#create_reservation_in_block(block)" do
+    it "creates a reservation from a room inside a given block" do
+      front_desk = Hotel::FrontDesk.new
+      block1 = admin4.create_block(start_date: Date.new(2018, 12, 8), end_date: Date.new(2018, 12, 15), num_rooms: 3)
+      res_from_block = front_desk.create_reservation_in_block(block1)
+      front_desk.rooms[0].reservations.must_include res_from_block
+
+      # block.must_be_instance_of Hotel::Block
+      # block.start_date.must_equal Date.new(2018, 12, 1)
+      # admin4.rooms[0].blocks.must_include block
+      # admin4.rooms[3].blocks.must_include block
+      # admin4.rooms[4].blocks.wont_include block
     end
   end
 end

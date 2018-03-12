@@ -4,7 +4,7 @@ module Hotel
   MAX_ROOMS_COUNT = 20
   MAX_BLOCKED_ROOMS = 5
   class Room
-    attr_reader :number, :reservations
+    attr_reader :number, :reservations, :blocks
 
     def initialize(number:)
       @number = number

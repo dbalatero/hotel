@@ -32,29 +32,35 @@ module Hotel
       )
     end
 
-    def create_block(start_date:, end_date:, num_rooms:, rate:)
-      rooms = available_rooms(start_date, end_date)[0..num_rooms]
-      block = Hotel::Block.new(start_date: start_date, end_date: end_date)
+    def create_block(start_date:, end_date:, num_rooms:)
+      rooms = available_rooms(start_date, end_date)[0...num_rooms]
+      input = {
+        start_date: start_date,
+        end_date: end_date
+      }
+      block = Hotel::Block.new(input)
       rooms.each do |room|
         room.hold(block)
       end
       block
     end
 
-    # def create_reservation_in_block(block)
-    #   room = block.gimme_the_first_block
-    #
-    #   start_date = block.start_date
-    #   end_date = block.end_date
-    #   rate = block.rate
-    #
-    #   create_reservation(
-    #     room: room
-    #     start_date: start_date,
-    #     end_date: end_date,
-    #     rate: rate
-    #   )
-    # end
+    def create_reservation_in_block(block)
+      room = (@rooms.find_all do |room|
+        room.blocks != nil
+      end).first
+      # binding.pry
+      start_date = block.start_date
+      end_date = block.end_date
+      rate = block.rate
+
+      create_reservation(
+        room: room,
+        start_date: start_date,
+        end_date: end_date,
+        rate: block.rate
+      )
+    end
 
     def find_reservations_for(date)
       @rooms
@@ -80,7 +86,6 @@ module Hotel
 
     def requested_room_available?(number, start_date, end_date)
       room = @rooms.find { |room| room.number == number }
-      # binding.pry
       if room.available?(start_date, end_date)
         return true
       else
