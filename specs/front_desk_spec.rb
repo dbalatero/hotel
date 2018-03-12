@@ -86,11 +86,14 @@ describe "FrontDesk class" do
     end
   end
 
-  # describe "get_total_cost(reservation_id) method" do
-  #
-  #   it "returns the total cost of a given reservation"
-  #
-  # end
+  describe "#rooms_available_for" do
+    it "returns all of the rooms that are available for a given date" do
+      front_desk = Hotel::FrontDesk.new
+      date = Date.new(2018, 2, 1)
+      rooms = front_desk.rooms_available_for(date)
+      rooms.length.must_equal 20
+    end
+  end
 
    #write test for: view a list of rooms that are not reserved for a given date range
 end

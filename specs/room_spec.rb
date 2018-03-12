@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe "Room class" do
   let(:room) { Hotel::Room.new(number: 1) }
-
+  
   describe "#available?" do
     # custom methods for more readable, DRY tests
     def expect_room_to_be_available(start_date, end_date)
@@ -26,7 +26,6 @@ describe "Room class" do
         end_date: Date.new(2018, 5, 5)
         )
       end
-
       before { room.book(reservation) }
 
       it 'should not be available if the start date overlaps' do

@@ -55,6 +55,10 @@ module Hotel
       available_rooms(start_date, end_date).first
     end
 
+    def rooms_available_for(date)
+      rooms = @rooms.find_all { |room| room.reservations.length == 0}
+    end
+
     private
 
     def requested_room(input)
