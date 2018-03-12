@@ -3,7 +3,7 @@ require 'pry'
 module Hotel
   MAX_ROOMS_COUNT = 20
   class Room
-    attr_reader :number
+    attr_reader :number, :reservations
 
     def initialize(number:)
       @number = number

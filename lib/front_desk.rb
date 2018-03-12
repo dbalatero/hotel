@@ -12,15 +12,16 @@ module Hotel
       # @blocks = [...]
     end
 
-    def make_reservation(start_date:, end_date:)
+    def make_reservation(start_date:, end_date:, **args)
       check_for_valid_dates!(start_date, end_date)
-
-      room = find_room(start_date, end_date)
-      #
-      # unless room
-      #   raise "NO rooms avaiable"
-      # end
-
+      if args.has_key?(:room) && requested_room_available?(args[:room], start_date, end_date)
+        room = @rooms.find { |room| room.number == args[:room] }
+      else
+        room = find_room(start_date, end_date)
+      end
+      unless room
+        raise ArgumentError.new("No rooms available for that date range")
+      end
       create_reservation(
         # should find_room not find blocked rooms?
         room: room,
@@ -56,6 +57,16 @@ module Hotel
 
     private
 
+    def requested_room_available?(number, start_date, end_date)
+      room = @rooms.find { |room| room.number == number }
+      # binding.pry
+      if room.available?(start_date, end_date)
+        return true
+      else
+        return false
+      end
+    end
+
     def available_rooms(start_date, end_date)
       @rooms.find_all do |room|
         room.available?(start_date, end_date)
@@ -77,14 +88,10 @@ module Hotel
     end
 
     def create_reservation(input)
-      if input[:room].nil?
-        raise ArgumentError.new("no rooms available for that date range")
-      else
-        room = input[:room]
-        reservation = Hotel::Reservation.new(input)
-        room.book(reservation)
-        reservation
-      end
+      room = input[:room]
+      reservation = Hotel::Reservation.new(input)
+      room.book(reservation)
+      reservation
     end
   end
 end

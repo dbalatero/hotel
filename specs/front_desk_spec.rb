@@ -17,15 +17,23 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "make_reservation method" do
-
-    it "stores new reservation" do
+  describe "#make_reservation(start_date:, end_date:)" do
+    it "creates and stores a new Reservation" do
       dates = { start_date: Date.new(2018,6,7), end_date: Date.new(2018,6,10)}
       new_res = admin.make_reservation(dates)
+      new_res.must_be_instance_of Hotel::Reservation
       admin.find_reservations_for( Date.new(2018, 6, 8))
         .must_include new_res
       new_res.start_date.must_equal Date.new(2018, 6, 7)
     end
+
+    it "books a requested room, if available" do
+      reservation = admin.make_reservation(start_date: Date.new(2018,8,20), end_date: Date.new(2018,8,27), room: 3)
+      # binding.pry
+      admin.rooms[2].reservations.must_include reservation
+    end
+
+    it "allows a reservation to start on the same day that another reservation for the same room ends"
 
     it "raises an error if the start or end date are not Date objects" do
       proc { admin2.make_reservation(start_date: 201897, end_date: 2018910) }
@@ -44,10 +52,10 @@ describe "FrontDesk class" do
       proc { admin3.make_reservation(start_date: Date.new(2018, 9, 11), end_date: Date.new(2018, 9, 15)) }.must_raise ArgumentError
     end
 
+    it
   end
 
-  describe "find_reservations_for(date) method" do
-
+  describe "#find_reservations_for(date)" do
     it "returns a list of reservations for given date" do
       admin.make_reservation({ start_date: Date.new(2018, 6, 7),
       end_date: Date.new(2018, 6, 10) })
