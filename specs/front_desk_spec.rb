@@ -33,7 +33,12 @@ describe "FrontDesk class" do
       admin.rooms[2].reservations.must_include reservation
     end
 
-    it "allows a reservation to start on the same day that another reservation for the same room ends"
+    it "allows a reservation to start on the same day that another reservation for the same room ends" do
+      res1 = admin2.make_reservation(start_date: Date.new(2018, 10, 5), end_date: Date.new(2018, 10, 8), room: 5)
+      res2 = admin2.make_reservation(start_date: Date.new(2018, 10, 8), end_date: Date.new(2018, 10, 11), room: 5)
+      admin2.rooms[4].reservations[0].end_date.must_equal Date.new(2018, 10, 8)
+      admin2.rooms[4].reservations[1].start_date.must_equal Date.new(2018, 10, 8)
+    end
 
     it "raises an error if the start or end date are not Date objects" do
       proc { admin2.make_reservation(start_date: 201897, end_date: 2018910) }
@@ -51,8 +56,6 @@ describe "FrontDesk class" do
       end
       proc { admin3.make_reservation(start_date: Date.new(2018, 9, 11), end_date: Date.new(2018, 9, 15)) }.must_raise ArgumentError
     end
-
-    it
   end
 
   describe "#find_reservations_for(date)" do

@@ -15,7 +15,7 @@ module Hotel
     def make_reservation(start_date:, end_date:, **args)
       check_for_valid_dates!(start_date, end_date)
       if args.has_key?(:room) && requested_room_available?(args[:room], start_date, end_date)
-        room = @rooms.find { |room| room.number == args[:room] }
+        room = requested_room(args[:room])
       else
         room = find_room(start_date, end_date)
       end
@@ -56,6 +56,10 @@ module Hotel
     end
 
     private
+
+    def requested_room(input)
+      @rooms.find { |room| room.number == input }
+    end
 
     def requested_room_available?(number, start_date, end_date)
       room = @rooms.find { |room| room.number == number }

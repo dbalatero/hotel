@@ -36,8 +36,8 @@ describe "Room class" do
         )
       end
 
-      it 'should not be available if the end date overlaps' do
-        expect_room_to_not_be_available(
+      it 'should be available if the end date overlaps' do
+        expect_room_to_be_available(
         Date.new(2018, 4, 28),
         Date.new(2018, 5, 5)
         )
