@@ -1,4 +1,0 @@
-module Hotel
-
-
-end

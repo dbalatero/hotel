@@ -2,14 +2,15 @@ require 'date'
 require 'pry'
 require_relative 'room'
 require_relative 'reservation'
+require_relative 'block'
 
 module Hotel
   class FrontDesk
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :blocks
 
     def initialize
       @rooms = load_rooms
-      # @blocks = [...]
+      # @blocks = []
     end
 
     def make_reservation(start_date:, end_date:, **args)
@@ -17,17 +18,27 @@ module Hotel
       if args.has_key?(:room) && requested_room_available?(args[:room], start_date, end_date)
         room = requested_room(args[:room])
       else
+        # I chose to not raise an error here, and just pick the next available room if the requested one is unavailable.
         room = find_room(start_date, end_date)
+        # should find_room not find blocked rooms?
       end
       unless room
         raise ArgumentError.new("No rooms available for that date range")
       end
       create_reservation(
-        # should find_room not find blocked rooms?
         room: room,
         start_date: start_date,
         end_date: end_date
       )
+    end
+
+    def create_block(start_date:, end_date:, num_rooms:, rate:)
+      rooms = available_rooms(start_date, end_date)[0..num_rooms]
+      block = Hotel::Block.new(start_date: start_date, end_date: end_date)
+      rooms.each do |room|
+        room.hold(block)
+      end
+      block
     end
 
     # def create_reservation_in_block(block)
@@ -55,8 +66,10 @@ module Hotel
       available_rooms(start_date, end_date).first
     end
 
-    def rooms_available_for(date)
-      rooms = @rooms.find_all { |room| room.reservations.length == 0}
+    def available_rooms(start_date, end_date)
+      @rooms.find_all do |room|
+        room.available?(start_date, end_date) && room.not_blocked?(start_date, end_date)
+      end
     end
 
     private
@@ -72,12 +85,6 @@ module Hotel
         return true
       else
         return false
-      end
-    end
-
-    def available_rooms(start_date, end_date)
-      @rooms.find_all do |room|
-        room.available?(start_date, end_date)
       end
     end
 

@@ -86,14 +86,25 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "#rooms_available_for" do
-    it "returns all of the rooms that are available for a given date" do
+  describe "#available_rooms" do
+    it "returns all of the rooms that are available for a given date range" do
       front_desk = Hotel::FrontDesk.new
-      date = Date.new(2018, 2, 1)
-      rooms = front_desk.rooms_available_for(date)
+      start_date = Date.new(2018, 2, 1)
+      end_date = Date.new(2018, 2, 5)
+      rooms = front_desk.available_rooms(start_date, end_date)
       rooms.length.must_equal 20
     end
   end
 
-   #write test for: view a list of rooms that are not reserved for a given date range
+  describe "#create_block(start_date:, end_date:, :num_rooms)" do
+    it "creates and stores a new Block" do
+      admin4 = Hotel::FrontDesk.new
+      block = admin4.create_block(start_date: Date.new(2018, 12, 1), end_date: Date.new(2018, 12, 5), num_rooms: 4, rate: 150)
+      block.must_be_instance_of Hotel::Block
+      # admin4.find_reservations_for( Date.new(2018, 6, 8))
+      #   .must_include new_res
+      block.start_date.must_equal Date.new(2018, 12, 1)
+      binding.pry
+    end
+  end
 end
