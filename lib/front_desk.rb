@@ -68,21 +68,23 @@ module Hotel
       end
     end
 
-    def check_for_valid_dates!(sd, ed)
-      if sd.class != Date || ed.class != Date
+    def check_for_valid_dates!(start_date, end_date)
+      if start_date.class != Date || end_date.class != Date
         raise ArgumentError.new("Date must be a Date object")
-      elsif ed < sd
+      elsif end_date < start_date
         raise ArgumentError.new("start date must be before end date")
       end
     end
 
     def create_reservation(input)
-      room = input[:room]
-      reservation = Hotel::Reservation.new(input)
-
-      room.book(reservation)
-
-      reservation
+      if input[:room].nil?
+        raise ArgumentError.new("no rooms available for that date range")
+      else
+        room = input[:room]
+        reservation = Hotel::Reservation.new(input)
+        room.book(reservation)
+        reservation
+      end
     end
   end
 end
