@@ -13,7 +13,6 @@ module Hotel
       date_range.include?(date)
     end
 
-    # this method is currently calculating accurate cost without ignoring the check-out day...not sure why
     def cost
       total_nights * @rate
     end

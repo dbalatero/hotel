@@ -2,28 +2,26 @@ require_relative 'spec_helper'
 
 describe "Reservation class" do
 
-  before do
-    start_date = Date.new(2018,5,20)
-    end_date = start_date + 4
-    @reservation_data = {
-      res_id: 8,
-      room: Hotel::Room.new(number: 3),
-      start_date: start_date,
-      end_date: end_date
-    }
-    @reservation = Hotel::Reservation.new(@reservation_data)
-  end
+  let(:reservation) { Hotel::Reservation.new(start_date: Date.new(2018, 3, 15), end_date: Date.new(2018, 3, 18)) }
 
   describe "#booked?(date)" do
-    it "returns true if the Reservation is booked on a given date"
+    it "returns true if the Reservation is booked on a given date" do
+      reservation.booked?(Date.new(2018, 3, 16)).must_equal true
+    end
 
-    it "returns false if the Reservation is not booked on a given date"
-
+    it "returns false if the Reservation is not booked on a given date" do
+      reservation.booked?(Date.new(2018, 4, 1)).must_equal false
+    end
   end
 
   describe "#cost" do
     it "calculates the total cost of a Reservation" do
+      reservation.cost.must_equal 600
+    end
 
+    it "sets the appropriate rate given the input" do
+      new_reservation = Hotel::Reservation.new(start_date: Date.new(2018, 3, 15), end_date: Date.new(2018, 3, 18), rate: 150)
+      new_reservation.cost.must_equal 450
     end
   end
 
