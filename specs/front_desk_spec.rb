@@ -28,14 +28,14 @@ describe "FrontDesk class" do
     end
 
     it "books a requested room, if available" do
-      reservation = admin.make_reservation(start_date: Date.new(2018,8,20), end_date: Date.new(2018,8,27), room: 3)
+      reservation = admin.make_reservation(start_date: Date.new(2018,8,20), end_date: Date.new(2018,8,27), room_number: 3)
       # binding.pry
       admin.rooms[2].reservations.must_include reservation
     end
 
     it "allows a reservation to start on the same day that another reservation for the same room ends" do
-      res1 = admin2.make_reservation(start_date: Date.new(2018, 10, 5), end_date: Date.new(2018, 10, 8), room: 5)
-      res2 = admin2.make_reservation(start_date: Date.new(2018, 10, 8), end_date: Date.new(2018, 10, 11), room: 5)
+      res1 = admin2.make_reservation(start_date: Date.new(2018, 10, 5), end_date: Date.new(2018, 10, 8), room_number: 5)
+      res2 = admin2.make_reservation(start_date: Date.new(2018, 10, 8), end_date: Date.new(2018, 10, 11), room_number: 5)
       admin2.rooms[4].reservations[0].end_date.must_equal Date.new(2018, 10, 8)
       admin2.rooms[4].reservations[1].start_date.must_equal Date.new(2018, 10, 8)
     end
@@ -78,10 +78,10 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "#find_room" do
+  describe "#find_available_room" do
     it "finds the first available room" do
       front_desk = Hotel::FrontDesk.new
-      room = front_desk.find_room( Date.new(2018, 4, 8), Date.new(2018, 4, 11))
+      room = front_desk.find_available_room( Date.new(2018, 4, 8), Date.new(2018, 4, 11))
       room.number.must_equal 1
     end
   end
@@ -106,7 +106,6 @@ describe "FrontDesk class" do
   describe "#create_block(start_date:, end_date:, :num_rooms)" do
     it "creates and stores a new Block" do
       block = admin4.create_block(start_date: Date.new(2018, 12, 1), end_date: Date.new(2018, 12, 5), num_rooms: 4)
-      # binding.pry
       block.must_be_instance_of Hotel::Block
       block.start_date.must_equal Date.new(2018, 12, 1)
       admin4.rooms[0].blocks.must_include block
@@ -118,15 +117,12 @@ describe "FrontDesk class" do
   describe "#create_reservation_in_block(block)" do
     it "creates a reservation from a room inside a given block" do
       front_desk = Hotel::FrontDesk.new
-      block1 = admin4.create_block(start_date: Date.new(2018, 12, 8), end_date: Date.new(2018, 12, 15), num_rooms: 3)
-      res_from_block = front_desk.create_reservation_in_block(block1)
-      front_desk.rooms[0].reservations.must_include res_from_block
 
-      # block.must_be_instance_of Hotel::Block
-      # block.start_date.must_equal Date.new(2018, 12, 1)
-      # admin4.rooms[0].blocks.must_include block
-      # admin4.rooms[3].blocks.must_include block
-      # admin4.rooms[4].blocks.wont_include block
+      block = front_desk.create_block(start_date: Date.new(2018, 12, 8), end_date: Date.new(2018, 12, 15), num_rooms: 3)
+
+      res_from_block = front_desk.create_reservation_in_block(block)
+
+      front_desk.rooms[0].reservations.must_include res_from_block
     end
   end
 end

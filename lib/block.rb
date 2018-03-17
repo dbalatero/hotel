@@ -8,8 +8,6 @@ module Hotel
     def initialize(input)
       @start_date = input[:start_date]
       @end_date = input[:end_date]
-      # @rooms = input[:rooms]
-      # want to check the num of room objects to make sure it is 5 or less
       @rate = input[:rate] || DISCOUNTED_COST_PER_NIGHT
     end
 
