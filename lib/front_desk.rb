@@ -6,11 +6,10 @@ require_relative 'block'
 
 module Hotel
   class FrontDesk
-    attr_reader :rooms, :blocks
+    attr_reader :rooms
 
     def initialize
       @rooms = load_rooms
-      # @blocks = []
     end
 
     def make_reservation(start_date:, end_date:, room_number: nil)

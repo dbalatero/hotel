@@ -15,7 +15,7 @@ describe "Reservation class" do
   end
 
   describe "#cost" do
-    it "calculates the total cost of a Reservation" do
+    it "calculates the total default cost of a Reservation" do
       reservation.cost.must_equal 600
     end
 

@@ -2,7 +2,7 @@
 module Hotel
   class Block
     DISCOUNTED_COST_PER_NIGHT = 125
-
+    MAX_BLOCKED_ROOMS = 5
     attr_reader :start_date, :end_date, :rate
 
     def initialize(input)

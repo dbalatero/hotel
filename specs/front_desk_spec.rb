@@ -29,7 +29,6 @@ describe "FrontDesk class" do
 
     it "books a requested room, if available" do
       reservation = admin.make_reservation(start_date: Date.new(2018,8,20), end_date: Date.new(2018,8,27), room_number: 3)
-      # binding.pry
       admin.rooms[2].reservations.must_include reservation
     end
 
@@ -98,7 +97,6 @@ describe "FrontDesk class" do
     it "does not return blocked rooms" do
       front_desk = Hotel::FrontDesk.new
       block = front_desk.create_block(start_date: Date.new(2018, 7, 1), end_date: Date.new(2018, 7, 6), num_rooms: 5)
-      # binding.pry
       front_desk.available_rooms(Date.new(2018, 7, 1), Date.new(2018, 7, 6)).wont_include front_desk.rooms[0]
     end
   end
@@ -117,11 +115,8 @@ describe "FrontDesk class" do
   describe "#create_reservation_in_block(block)" do
     it "creates a reservation from a room inside a given block" do
       front_desk = Hotel::FrontDesk.new
-
       block = front_desk.create_block(start_date: Date.new(2018, 12, 8), end_date: Date.new(2018, 12, 15), num_rooms: 3)
-
       res_from_block = front_desk.create_reservation_in_block(block)
-
       front_desk.rooms[0].reservations.must_include res_from_block
     end
   end
