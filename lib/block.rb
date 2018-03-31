@@ -18,7 +18,7 @@ module Hotel
   private
 
     def date_range
-      start_date..end_date - 1
+      start_date...end_date
     end
 
   end

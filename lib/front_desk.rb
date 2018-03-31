@@ -29,19 +29,14 @@ module Hotel
       )
     end
 
-    def create_block(start_date:, end_date:, num_rooms:)
+    def make_block(start_date:, end_date:, num_rooms:)
       rooms = available_rooms(start_date, end_date)[0...num_rooms]
 
-      block = Hotel::Block.new(
+      create_block(
+        rooms: rooms,
         start_date: start_date,
         end_date: end_date
       )
-
-      rooms.each do |room|
-        room.hold(block)
-      end
-
-      block
     end
 
     def create_reservation_in_block(block)
@@ -59,12 +54,6 @@ module Hotel
       @rooms
         .map { |room| room.find_reservations_for(date) }
         .flatten
-    end
-
-    def find_room_with_block(block)
-      @rooms.find_all do |room|
-        room.blocks.include?(block)
-      end.first
     end
 
     def find_available_room(start_date, end_date)
@@ -95,7 +84,7 @@ module Hotel
       if start_date.class != Date || end_date.class != Date
         raise ArgumentError.new("Date must be a Date object")
       elsif end_date < start_date
-        raise ArgumentError.new("start date must be before end date")
+        raise ArgumentError.new("Start date must be before end date")
       end
     end
 
@@ -104,6 +93,21 @@ module Hotel
       reservation = Hotel::Reservation.new(input)
       room.book(reservation)
       reservation
+    end
+
+    def create_block(input)
+      rooms = input[:rooms]
+      block = Hotel::Block.new(input)
+      rooms.each do |room|
+        room.hold(block)
+      end
+      block
+    end
+
+    def find_room_with_block(block)
+      @rooms.find_all do |room|
+        room.blocks.include?(block)
+      end.first
     end
   end
 end
