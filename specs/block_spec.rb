@@ -5,8 +5,9 @@ describe "Block class" do
 
   describe "initialize" do
     it "sets the appropriate rate given optional input" do
-      new_block = Hotel::Block.new(start_date: Date.new(2018, 3, 15), end_date: Date.new(2018, 3, 18), rate: 99)
+      new_block = Hotel::Block.new(start_date: Date.new(2018, 3, 15), end_date: Date.new(2018, 3, 18), rate: 99, name: "Peters Wedding")
       new_block.rate.must_equal 99
+      new_block.name.must_equal "Peters Wedding"
     end
 
     it "sets the default per room rate if none is given" do

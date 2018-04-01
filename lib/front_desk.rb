@@ -48,6 +48,7 @@ module Hotel
         end_date: block.end_date,
         rate: block.rate
       )
+      #TODO?: modify this method (or something else) to meet the requirement of "check whether a given block has any rooms available"... need to remove the block from the room/room from the block and write test to check...
     end
 
     def find_reservations_for(date)

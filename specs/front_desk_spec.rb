@@ -113,5 +113,6 @@ describe "FrontDesk class" do
       res_from_block = admin.create_reservation_in_block(block)
       admin.rooms[0].reservations.must_include res_from_block
     end
+
   end
 end

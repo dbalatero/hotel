@@ -34,3 +34,13 @@ A: Implementation B.
 
 Q: Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled
 A: Implementation B is more loosely coupled because it has fewer dependencies and each class adheres more to SRP and knows less about the other objects.
+
+
+Q: Identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+A:
+I noticed that my FrontDesk class called Hotel::Block.new by name directly inside FrontDesk#create_block. I decided to wrap this instance creation inside a private helper method in FrontDesk class called #create_block (similar to the private create_reservation method for creating new instances of Hotel::Reservation), and renamed the main create_block method as “make_block”. I think this is an improvement because if Block were to change, it would be easier to update the helper method.
+
+There were a few other observations that I had but did not act on:
+I also noticed that both Reservation and Block classes have some similar behavior, including the #booked_for?(date) and #date_range methods and wondered if that duplication was acceptable given that the Reservation and Block objects are used differently.
+I also noticed that FrontDesk has a number of methods whose purpose is to find available rooms, such as #find_available_room, which calls #available_rooms, which calls Room methods #available? and #not_blocked?. There are also the private methods #find_available_room_with_number and #find_room_with_block. And after reading POODR chapter 4, where Metz makes the suggestion of a TripFinder class for her code example, it made me wonder if all of this finding rooms behavior belonged in its own class like “RoomFinder” - but I’d like more feedback before I attempt to implement this.
+I also considered that FrontDesk should probably have a way of calculating the total cost of a reservation, for when people checkout and pay; however, this was not part of the stated requirements so I’ll assume it should not be built.
